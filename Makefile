@@ -88,7 +88,20 @@ BIN = $(CP) -O binary
 FLASHER = STM32_Programmer_CLI
 SIGNER = STM32MP_SigningTool_CLI
 OBJCOPY = arm-none-eabi-objcopy
+PATH="/Applications/STMicroelectronics/STM32Cube/STM32CubeProgrammer/STM32CubeProgrammer.app/Contents/MacOs/bin:$PATH"
+
+# Supported Options: STM32N6570-DK; NUCLEO-N657X0-Q
+BOARD ?= NUCLEO-N657X0-Q
+
+define is_nucleo
+$(if $(filter $(BOARD),NUCLEO-N657X0-Q),1,0)
+endef
+
+ifeq ($(call is_nucleo),1)
 EL = "$(shell dirname "$(shell which $(FLASHER))")/ExternalLoader/MX25UM51245G_STM32N6570-NUCLEO.stldr"
+else
+EL = "$(shell dirname "$(shell which $(FLASHER))")/ExternalLoader/MX25UM51245G_STM32N6570-NUCLEO.stldr"
+endif
 
 #######################################
 # CFLAGS
@@ -101,38 +114,28 @@ MCU = $(CPU) $(FPU)
 
 # C defines
 C_DEFS += -DSTM32N657xx
-#C_DEFS += -DUSE_STM32N6570_DK
-C_DEFS += -DUSE_STM32N6570_NUCLEO_REV_B01
+
+ifeq ($(call is_nucleo),1)
+C_DEFS += -DUSE_STM32N6xx_NUCLEO
+C_DEFS += -DNUCLEO_N6_CONFIG=1
+else
+C_DEFS += -DUSE_STM32N6570_DK
+C_DEFS += -DSTM32N6570_DK_REV=STM32N6570_DK_C01
+endif
+
 C_DEFS += -DUSE_FULL_ASSERT
 C_DEFS += -DUSE_FULL_LL_DRIVER
 C_DEFS += -DVECT_TAB_SRAM
-C_DEFS += -DNUCLEO_N6_CONFIG=1
 C_DEFS += -DUSER_VECT_TAB_ADDRESS
-
-ifeq ($(REV_BOARD),B01)
-C_DEFS += -DSTM32N6570_DK_REV=STM32N6570_DK_B01
-endif
-ifeq ($(REV_BOARD),C01)
-C_DEFS += -DSTM32N6570_DK_REV=STM32N6570_DK_C01
-endif
-ifeq ($(REV_BOARD),A01)
-C_DEFS += -DSTM32N6570_DK_REV=STM32N6570_DK_A01
-endif
-ifeq ($(REV_BOARD),A03)
-#this is not a typo
-C_DEFS += -DSTM32N6570_DK_REV=STM32N6570_DK_A01
-endif
-
-ifneq ($(REV_BOARD),C01)
-C_DEFS += -DSTM32N6XX_SI_CUT1_1
-AS_DEFS += -DSTM32N6XX_SI_CUT1_1
-endif
 
 AS_DEFS += -DEXECUTE_AFTER_FSBL
 
 # We only support single model
 C_DEFS += -DTX_MAX_PARALLEL_NETWORKS=1
 C_DEFS += -DAPP_HAS_PARALLEL_NETWORKS=0
+
+C_DEFS += -DUSE_NS_TIMER=1
+
 # C includes
 # Patched files
 C_INCLUDES += -IInc
@@ -155,8 +158,11 @@ CFLAGS += -std=gnu11
 # LDFLAGS
 #######################################
 # link script
-#LDSCRIPT = Gcc/STM32N657xx.ld
+ifeq ($(call is_nucleo),1)
 LDSCRIPT = Gcc/STM32N657xx_nucleo.ld
+else
+LDSCRIPT = Gcc/STM32N657xx.ld
+endif
 
 # libraries
 LIBS = -lc -lm -lnosys

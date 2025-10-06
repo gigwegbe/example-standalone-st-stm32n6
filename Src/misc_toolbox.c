@@ -75,37 +75,24 @@ static void fuse_hardware_conf(uint32_t bit_to_fuse)
 
 void set_clk_sleep_mode(void)
 {
-  /* Leave clocks enabled in Low Power modes */
-  // Low-power clock enable misc
-  __HAL_RCC_DBG_CLK_SLEEP_ENABLE();
-  __HAL_RCC_XSPIPHYCOMP_CLK_SLEEP_ENABLE();
+  /* Keep all IP's enabled during WFE so they can wake up CPU. Fine tune
+   * this if you want to save maximum power
+   */
+  LL_BUS_EnableClockLowPower(~0);
+  LL_MEM_EnableClockLowPower(~0);
+  LL_AHB1_GRP1_EnableClockLowPower(~0);
+  LL_AHB2_GRP1_EnableClockLowPower(~0);
+  LL_AHB3_GRP1_EnableClockLowPower(~0);
+  LL_AHB4_GRP1_EnableClockLowPower(~0);
+  LL_AHB5_GRP1_EnableClockLowPower(~0);
+  LL_APB1_GRP1_EnableClockLowPower(~0);
+  LL_APB1_GRP2_EnableClockLowPower(~0);
+  LL_APB2_GRP1_EnableClockLowPower(~0);
+  LL_APB4_GRP1_EnableClockLowPower(~0);
+  LL_APB4_GRP2_EnableClockLowPower(~0);
+  LL_APB5_GRP1_EnableClockLowPower(~0);
+  LL_MISC_EnableClockLowPower(~0);
   
-  // Low-power clock enable for memories
-  __HAL_RCC_AXISRAM1_MEM_CLK_SLEEP_ENABLE();
-  __HAL_RCC_AXISRAM2_MEM_CLK_SLEEP_ENABLE();
-  __HAL_RCC_AXISRAM3_MEM_CLK_SLEEP_ENABLE();
-  __HAL_RCC_AXISRAM4_MEM_CLK_SLEEP_ENABLE();
-  __HAL_RCC_AXISRAM5_MEM_CLK_SLEEP_ENABLE();
-  __HAL_RCC_AXISRAM6_MEM_CLK_SLEEP_ENABLE();
-  __HAL_RCC_FLEXRAM_MEM_CLK_SLEEP_ENABLE();
-  __HAL_RCC_CACHEAXIRAM_MEM_CLK_SLEEP_ENABLE();
-  // LP clock AHB1: None
-  // LP clock AHB2: None
-  // LP clock AHB3
-  __HAL_RCC_RIFSC_CLK_SLEEP_ENABLE();
-  __HAL_RCC_RISAF_CLK_SLEEP_ENABLE();
-  __HAL_RCC_IAC_CLK_SLEEP_ENABLE();
-  // LP clock AHB4: None
-  // LP clocks AHB5
-  __HAL_RCC_XSPI1_CLK_SLEEP_ENABLE();
-  __HAL_RCC_XSPI2_CLK_SLEEP_ENABLE();
-  __HAL_RCC_CACHEAXI_CLK_SLEEP_ENABLE();
-  __HAL_RCC_NPU_CLK_SLEEP_ENABLE();
-  // LP clocks APB1: None
-  // LP clocks APB2
-  __HAL_RCC_USART1_CLK_SLEEP_ENABLE();
-  // LP clocks APB4: None
-  // LP clocks APB5: None
 }
 
 /* Change the VDDCORE level for overdrive modes

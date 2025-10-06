@@ -41,6 +41,12 @@ extern int ei_main(void);
 int main(void)
 {
     set_vector_table_addr();
+    /* Power on ICACHE */
+    MEMSYSCTL->MSCR |= MEMSYSCTL_MSCR_ICACTIVE_Msk;
+
+    /* Set back system and CPU clock source to HSI */
+    __HAL_RCC_CPUCLK_CONFIG(RCC_CPUCLKSOURCE_HSI);
+    __HAL_RCC_SYSCLK_CONFIG(RCC_SYSCLKSOURCE_HSI);
 
     HAL_Init();
     system_init_post();
@@ -114,7 +120,11 @@ static void init_external_memories(void)
   {
         __BKPT(0);
   }
-  BSP_XSPI_NOR_EnableMemoryMappedMode(0);
+  if(BSP_XSPI_NOR_EnableMemoryMappedMode(0) != BSP_ERROR_NONE)
+  {
+        __BKPT(0);
+  }
+
 #endif 
 }
 
