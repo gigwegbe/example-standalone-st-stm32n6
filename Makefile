@@ -91,7 +91,7 @@ OBJCOPY = arm-none-eabi-objcopy
 PATH="/Applications/STMicroelectronics/STM32Cube/STM32CubeProgrammer/STM32CubeProgrammer.app/Contents/MacOs/bin:$PATH"
 
 # Supported Options: STM32N6570-DK; NUCLEO-N657X0-Q
-BOARD ?= NUCLEO-N657X0-Q
+BOARD ?= STM32N6570-DK
 
 define is_nucleo
 $(if $(filter $(BOARD),NUCLEO-N657X0-Q),1,0)

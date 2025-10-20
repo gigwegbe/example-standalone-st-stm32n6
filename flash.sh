@@ -2,10 +2,30 @@
 set -e
 
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-PATH="/Applications/STMicroelectronics/STM32Cube/STM32CubeProgrammer/STM32CubeProgrammer.app/Contents/MacOs/bin:$PATH"
-EL="$(dirname "$(which STM32_Programmer_CLI)")/ExternalLoader/MX25UM51245G_STM32N6570-NUCLEO.stldr"
 
-TARGET=$1
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --target)
+            TARGET="$2"
+            shift # past argument
+            shift # past value
+            ;;
+        --nucleo)
+            NUCLEO=1
+            shift # past argument
+            ;;
+        *)
+            POSITIONAL_ARGS+=("$1") # save positional arg
+            shift # past argument
+            ;;
+    esac
+done
+
+if [ "$NUCLEO" == 1 ]; then
+    EL="$(dirname "$(which STM32_Programmer_CLI)")/ExternalLoader/MX25UM51245G_STM32N6570-NUCLEO.stldr"
+else
+    EL="$(dirname "$(which STM32_Programmer_CLI)")/ExternalLoader/MX66UW1G45G_STM32N6570-DK.stldr"
+fi
 
 if [ -z "$TARGET" ]; then
     TARGET="all"

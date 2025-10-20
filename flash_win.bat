@@ -4,18 +4,43 @@ setlocal
 REM go to the folder where this bat script is located
 cd /d %~dp0
 
+set TARGET=
+set NUCLEO=0
+
+:parse_args
+if "%~1"=="" goto end_parse
+if "%~1"=="--target" (
+    set TARGET=%~2
+    shift
+    shift
+    goto parse_args
+)
+if "%~1"=="--nucleo" (
+    set NUCLEO=1
+    shift
+    goto parse_args
+)
+shift
+goto parse_args
+
+:end_parse
 
 set FLASH_FIRMWARE=firmware
 set FLASH_WEIGHTS=weights
 set FLASH_BOOTLOADER=bootloader
-set FLASHER=STM32_Programmer_CLI
-set EL\\ExternalLoader\\MX25UM51245G_STM32N6570-NUCLEO.stldr
+set FLASHER=STM32_Programmer_CLI.exe
 
-set TARGET=%1
+if %NUCLEO% EQU 1 (
+    set EL=\\ExternalLoader\\MX25UM51245G_STM32N6570-NUCLEO.stldr
+) else (
+    set EL=\\ExternalLoader\\MX66UW1G45G_STM32N6570-DK.stldr
+)
 
 if not defined TARGET SET TARGET="all"
 
 if %TARGET% NEQ "firmware" and %TARGET% NEQ "weights" and %TARGET% NEQ "bootloader" and %TARGET% NEQ "all" goto INVALIDTARGET
+
+
 
 echo Flashing %TARGET%
 
