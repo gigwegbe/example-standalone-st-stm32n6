@@ -73,7 +73,7 @@ ifeq ($(call is_nucleo),1)
 C_INCLUDES_FW += -I$(FW_REL_DIR)/Drivers/BSP/STM32N6xx_Nucleo
 C_INCLUDES_FW += -I$(FW_REL_DIR)/Drivers/BSP/Components/mx25um51245g
 else
-C_INCLUDES_FW += -I$(FW_REL_DIR)/Drivers/BSP/STM32N6xx_DK
+C_INCLUDES_FW += -I$(FW_REL_DIR)/Drivers/BSP/STM32N6570-DK
 C_INCLUDES_FW += -I$(FW_REL_DIR)/Drivers/BSP/Components/aps256xx
 C_INCLUDES_FW += -I$(FW_REL_DIR)/Drivers/BSP/Components/mx66uw1g45g
 endif
