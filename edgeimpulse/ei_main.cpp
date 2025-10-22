@@ -37,6 +37,9 @@
 #include "edge-impulse-sdk/porting/ei_classifier_porting.h"
 #include "model-parameters/model_variables.h"
 #include "stm32n6xx_hal.h"
+#if defined(USE_NS_TIMER) && (USE_NS_TIMER == 1)
+#include "timer_config.h"
+#endif
 
 /* Private variables ------------------------------------------------------- */
 static const float features[] = {
@@ -85,3 +88,13 @@ extern "C" int ei_main(void)
 
     return  0;
 }
+
+#if defined(USE_NS_TIMER) && (USE_NS_TIMER == 1)
+__attribute__((weak)) uint64_t ei_read_timer_ms() {
+    return timer_config_read_us()/1000;
+}
+
+__attribute__((weak)) uint64_t ei_read_timer_us() {
+    return timer_config_read_us();
+}
+#endif
