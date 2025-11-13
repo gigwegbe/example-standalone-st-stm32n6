@@ -48,7 +48,23 @@ static const float features[] = {
 
 int raw_feature_get_data(size_t offset, size_t length, float *out_ptr)
 {
+#if EI_CLASSIFIER_SENSOR == EI_CLASSIFIER_SENSOR_CAMERA
+    size_t index = 0;
+    uint32_t value;
+    uint8_t* out_byte_ptr = (uint8_t*)out_ptr;
+    //memcpy(out_ptr, features + offset, length * sizeof(float));
+    for (size_t ix = 0; ix < (length/3); ix++) {
+        value = (uint32_t)features[offset + ix];
+
+        out_byte_ptr[index++] = (uint8_t)((value >> 16) & 0xFF);
+        out_byte_ptr[index++] = (uint8_t)((value >> 8) & 0xFF);
+        out_byte_ptr[index++] = (uint8_t)(value & 0xFF);
+
+    }
+#else
     memcpy(out_ptr, features + offset, length * sizeof(float));
+    uint8_t* out_byte_ptr = (uint8_t*)out_ptr;
+#endif
     return 0;
 }
 
