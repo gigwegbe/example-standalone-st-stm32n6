@@ -88,7 +88,6 @@ BIN = $(CP) -O binary
 FLASHER = STM32_Programmer_CLI
 SIGNER = STM32MP_SigningTool_CLI
 OBJCOPY = arm-none-eabi-objcopy
-PATH="/Applications/STMicroelectronics/STM32Cube/STM32CubeProgrammer/STM32CubeProgrammer.app/Contents/MacOs/bin:$PATH"
 
 # Supported Options: STM32N6570-DK; NUCLEO-N657X0-Q
 BOARD ?= STM32N6570-DK
