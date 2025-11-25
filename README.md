@@ -55,5 +55,4 @@ NOTE: The bootloader should be flashed just once!
 Use the serial console over the ST-LINK V3E USB connection.
 ```
 screen /dev/ttyACM0 115200
-
 ```
