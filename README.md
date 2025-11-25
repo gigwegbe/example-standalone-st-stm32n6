@@ -20,11 +20,13 @@ static const float features[] = {
 
 ### Model running on NPU
 Deploy your model as ST Neural-ART library.
-Copy `network.c` and `network_data.hex` into the `Model` folder.
-Copy `model-parameter` and `edge-impulse-sdk` folders into `edgeimpulse`.
+
+Copy the generated files into the project:
+- Copy `network.c` and `network_data.hex` into the `Model/` folder.
+- Copy `model-parameter` and `edge-impulse-sdk` folders into `edgeimpulse/`.
 
 ### Model running on MCU
-Deploy your model as C++ library, copy the extracted folder into the edgeimpulse folder.
+Deploy your model as C++ library, copy the extracted folder into the `edgeimpulse` folder.
 
 NOTE: If you are testing a model running on MCU, you don't need to flash the weights.
 
@@ -39,8 +41,8 @@ Make sure the switch BOOT1 is on the right!
 Launch the script for your os, argument can be:
 - all : flash weights and firmware
 - firmware : flash the firmware
-- weights : flash weights (network_data.hex) 
-- bootloader : flash the fsbl (ai_fsbl_cut_2_0.hex)
+- weights : flash weights `network_data.hex` 
+- bootloader : flash the fsbl `ai_fsbl_cut_2_0.hex`
 
 If no argument is provided, 'all' is the default one, which flash the weights and then the firmware.
 
@@ -48,3 +50,10 @@ After flashing is finished, switch BOOT1 to left.
 BOOT0 should be left to left postion.
 
 NOTE: The bootloader should be flashed just once!
+
+## View Output From the Device
+Use the serial console over the ST-LINK V3E USB connection.
+```
+screen /dev/ttyACM0 115200
+
+```
