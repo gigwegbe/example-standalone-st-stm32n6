@@ -20,13 +20,19 @@ static const float features[] = {
 
 ### Model running on NPU
 Deploy your model as ST Neural-ART library.
-Copy model.c and model_data.hex into the Model folder.
-Copy model-paramets and edge-impulse-sdk folders into edgeimpulse.
+Copy `network.c` and `network_data.hex` into the `Model` folder.
+Copy `model-parameter` and `edge-impulse-sdk` folders into `edgeimpulse`.
 
 ### Model running on MCU
 Deploy your model as C++ library, copy the extracted folder into the edgeimpulse folder.
 
 NOTE: If you are testing a model running on MCU, you don't need to flash the weights.
+
+### Build the project
+Build project using the provided Makefile.
+```
+make -j8
+```
 
 ## Flash the board
 Make sure the switch BOOT1 is on the right!
